@@ -1,11 +1,13 @@
 #if os(Linux)
 
 import XCTest
-@testable import AppTests
+@testable import AuthTests
+@testable import BasicTests
 
 XCTMain([
-    // AppTests
-    testCase(AppTests.allTests)
+    // AuthTests
+    testCase(AuthTests.allTests),
+    testCase(BasicTests.allTests),
 ])
 
 #endif

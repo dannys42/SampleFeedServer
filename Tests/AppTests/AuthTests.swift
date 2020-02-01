@@ -2,7 +2,7 @@ import XCTest
 @testable import App
 import SampleUtilities
 
-class AppTests: XCTestCase {
+class AuthTests: XCTestCase {
     let serverUrl = URL(string: "http://localhost:8080")!
     var httpClient: SampleHTTPClient!
     
@@ -14,16 +14,7 @@ class AppTests: XCTestCase {
     }
     override func tearDown() {
     }
-    
-    func testThatMainPageDoesNotExist() throws {
-        let expectedStatus = 404
-        let (resp,_) = try self.httpClient.get("/")
         
-        // 404 means server is up, but page does not exist.
-        XCTAssertTrue(resp.statusCode == expectedStatus, "Main page should return not found")
-
-    }
-    
     func testThatCannotCreateEmptyUser() throws {
         let expectedStatus = 400
         let (resp,_) = try self.httpClient.post("/users", [:])
@@ -104,7 +95,6 @@ class AppTests: XCTestCase {
     }
 
     static let allTests = [
-        ("testThatMainPageDoesNotExist", testThatMainPageDoesNotExist),
         ("testThatCannotCreateEmptyUser", testThatCannotCreateEmptyUser),
         ("testThatCanCreateUser", testThatCanCreateUser),
         ("testThatCannotCreateUserTwice", testThatCannotCreateUserTwice),
