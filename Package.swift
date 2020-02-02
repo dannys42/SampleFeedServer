@@ -20,12 +20,14 @@ let package = Package(
         // For logging
         .package(url: "https://github.com/vapor/console.git", from: "3.0.0"),
         
-        .package(path: "../SampleFeediOS/SampleUtilities")
+        // common utilities
+        // .package(url: "https://github.com/dannys42/SampleFeedUtilities", .branch("master"))
+        .package(path: "SampleFeedUtilities")
     ],
     targets: [
         .target(name: "App", dependencies: ["Authentication", "FluentSQLite", "Vapor", "VaporExt", "Rainbow", "Logging" ]),
         .target(name: "Run", dependencies: ["App"]),
-        .testTarget(name: "AppTests", dependencies: ["App", "SampleUtilities"])
+        .testTarget(name: "AppTests", dependencies: ["App", "SampleFeedUtilities"])
     ]
 )
 

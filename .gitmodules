@@ -1,0 +1,3 @@
+[submodule "SampleFeedUtilities"]
+	path = SampleFeedUtilities
+	url = git@github.com:dannys42/SampleFeedUtilities.git
