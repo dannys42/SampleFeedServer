@@ -23,7 +23,7 @@ final class UserToken: SQLiteModel {
     var string: String
     
     /// Reference to user that owns this token.
-    var userID: User.ID
+    var userId: User.ID
     
     /// Expiration date. Token will no longer be valid after this point.
     var expiresAt: Date?
@@ -34,14 +34,14 @@ final class UserToken: SQLiteModel {
         self.string = string
         // set token to expire after 5 hours
         self.expiresAt = Date.init(timeInterval: 60 * 60 * 5, since: .init())
-        self.userID = userID
+        self.userId = userID
     }
 }
 
 extension UserToken {
     /// Fluent relation to the user that owns this token.
     var user: Parent<UserToken, User> {
-        return parent(\.userID)
+        return parent(\.userId)
     }
 }
 
@@ -57,7 +57,7 @@ extension UserToken: Token {
     
     /// See `Token`.
     static var userIDKey: WritableKeyPath<UserToken, User.ID> {
-        return \.userID
+        return \.userId
     }
 }
 
@@ -68,9 +68,9 @@ extension UserToken: Migration {
         return SQLiteDatabase.create(UserToken.self, on: conn) { builder in
             builder.field(for: \.id, isIdentifier: true)
             builder.field(for: \.string)
-            builder.field(for: \.userID)
+            builder.field(for: \.userId)
             builder.field(for: \.expiresAt)
-            builder.reference(from: \.userID, to: \User.id)
+            builder.reference(from: \.userId, to: \User.id)
         }
     }
 }

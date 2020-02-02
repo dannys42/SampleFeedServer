@@ -22,21 +22,21 @@ final class Wall: SQLiteModel {
     var isPublic: Bool
 
     /// Reference to user that owns this `Wall`.
-    var userID: User.ID
+    var userId: User.ID
     
     /// Creates a new `Wall`.
     init(id: Int? = nil, topic: String, isPublic: Bool, userID: User.ID) {
         self.id = id
         self.topic = topic
         self.isPublic = isPublic
-        self.userID = userID
+        self.userId = userID
     }
 }
 
 extension Wall {
     /// Fluent relation to user that owns this wall.
     var user: Parent<Wall, User> {
-        return parent(\.userID)
+        return parent(\.userId)
     }
     
     var posts: Children<Wall, Post> {
@@ -51,8 +51,8 @@ extension Wall: Migration {
             builder.field(for: \.id, isIdentifier: true)
             builder.field(for: \.topic)
             builder.field(for: \.isPublic)
-            builder.field(for: \.userID)
-            builder.reference(from: \.userID, to: \User.id)
+            builder.field(for: \.userId)
+            builder.reference(from: \.userId, to: \User.id)
         }
     }
 }

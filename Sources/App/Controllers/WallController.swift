@@ -22,7 +22,7 @@ final class WallController {
         
         // query all wall's belonging to user
         return try Wall.query(on: req)
-            .filter(\.userID == user.requireID())
+            .filter(\.userId == user.requireID())
             .filter(\.id == wallId)
             .all()
     }
@@ -33,7 +33,7 @@ final class WallController {
         
         // query all wall's belonging to user
         return try Wall.query(on: req)
-            .filter(\.userID == user.requireID()).all()
+            .filter(\.userId == user.requireID()).all()
     }
 
     /// Creates a new Wall for the auth'd user.
@@ -57,7 +57,7 @@ final class WallController {
         // decode request parameter (walls/:id)
         return try req.parameters.next(Wall.self).flatMap { wall -> Future<Void> in
             // ensure the wall being deleted belongs to this user
-            guard try wall.userID == user.requireID() else {
+            guard try wall.userId == user.requireID() else {
                 throw Abort(.forbidden)
             }
             

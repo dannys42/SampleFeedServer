@@ -1,6 +1,6 @@
 import XCTest
 @testable import App
-import SampleUtilities
+import SampleFeedUtilities
 
 class AuthTests: XCTestCase {
     let serverUrl = URL(string: "http://localhost:8080")!

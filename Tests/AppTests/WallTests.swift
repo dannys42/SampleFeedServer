@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import App
-import SampleUtilities
+import SampleFeedUtilities
 
 class WallTests: XCTestCase {
     let serverUrl = URL(string: "http://localhost:8080")!
