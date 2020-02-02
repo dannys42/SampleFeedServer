@@ -27,11 +27,35 @@ class AuthTests: XCTestCase {
         let (resp,_) = try self.httpClient.post("/users",
                                                       [ "name" : "John Doe",
                                                         "email" : "john@somewhere.galaxy",
-                                                        "password" : "secret",
-                                                        "verifyPassword" : "secret"
+                                                        "password" : "secret"
         ])
         
         XCTAssertTrue(resp.statusCode == expectedStatus, "Should return error due to invalid parameters")
+    }
+    
+    func testThatCreatingDuplicateUserReturnsConflict() throws {
+        let username = "John Doe"
+        let email = "john@somewhere.galaxy"
+        let password = "secret"
+        
+        // ignore first one as user may be created already from previous tests
+        try? self.httpClient.createUser(username: username,
+                                                   password: password,
+                                                   email: email)
+        
+        // second one should have conflict
+        do {
+            try self.httpClient.createUser(username: username,
+                                                   password: password,
+                                                   email: email)
+        } catch SampleHTTPClient.LoginFailures.userAlreadyExists {
+            // good
+            return
+        } catch {
+            throw error
+        }
+
+        XCTFail("Second creation should result in 409 conflict if user already exists")
     }
     
     func testThatCannotCreateUserTwice() throws {
@@ -39,8 +63,7 @@ class AuthTests: XCTestCase {
         let expectedStatus2 = 409
         let userInfo = [ "name" : "John Doe",
                          "email" : "john@somewhere.galaxy",
-                         "password" : "secret",
-                         "verifyPassword" : "secret"
+                         "password" : "secret"
         ]
         let (resp1,_) = try self.httpClient.post("/users", userInfo)
 
@@ -58,8 +81,7 @@ class AuthTests: XCTestCase {
         // first create the user.  Don't care if this part succeeds or fails as we test login after
         let userInfo = [ "name" : "User1",
                         "email" : email,
-                        "password" : password,
-                        "verifyPassword" : password
+                        "password" : password
         ]
         let (_,_) = try self.httpClient.post("/users", userInfo)
 
@@ -86,8 +108,7 @@ class AuthTests: XCTestCase {
         // first create the user.  Don't care if this part succeeds or fails as we test login after
         let userInfo = [ "name" : "User1",
                         "email" : email,
-                        "password" : password,
-                        "verifyPassword" : password
+                        "password" : password
         ]
         let (_,_) = try self.httpClient.post("/users", userInfo)
         

@@ -21,16 +21,20 @@ final class UserController {
         print("Attempt to create user: \(req)")
         // decode request content
         return try req.content.decode(CreateUserRequest.self).flatMap { user -> Future<User> in
-            // verify that passwords match
-            guard user.password == user.verifyPassword else {
-                throw Abort(.badRequest, reason: "Password and verification must match.")
+            // Check if user already exists.
+            // Ref: https://stackoverflow.com/questions/58466181/vapor-3-how-to-check-for-similar-email-before-saving-object
+            return User.query(on: req).filter(\.email == user.email).first().flatMap { existingUser in
+                guard existingUser == nil else {
+                    throw Abort(.conflict, reason: "A user with this email already exists")
+                }
+                
+                // hash user's password using BCrypt
+                let hash = try BCrypt.hash(user.password)
+                
+                // save new user
+                return User(id: nil, name: user.name, email: user.email, passwordHash: hash)
+                    .save(on: req)
             }
-            
-            // hash user's password using BCrypt
-            let hash = try BCrypt.hash(user.password)
-            // save new user
-            return User(id: nil, name: user.name, email: user.email, passwordHash: hash)
-                .save(on: req)
         }.map { user in
             // map to public user response (omits password hash)
             return try UserResponse(id: user.requireID(), name: user.name, email: user.email)
@@ -51,8 +55,6 @@ struct CreateUserRequest: Content {
     /// User's desired password.
     var password: String
     
-    /// User's password repeated to ensure they typed it correctly.
-    var verifyPassword: String
 }
 
 /// Public representation of user data.
