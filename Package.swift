@@ -20,7 +20,7 @@ let package = Package(
         // For logging
         .package(url: "https://github.com/vapor/console.git", from: "3.0.0"),
         
-        .package(path: "../SampleUtilities")
+        .package(path: "../SampleFeediOS/SampleUtilities")
     ],
     targets: [
         .target(name: "App", dependencies: ["Authentication", "FluentSQLite", "Vapor", "VaporExt", "Rainbow", "Logging" ]),
