@@ -19,7 +19,7 @@ class WallTests: XCTestCase {
             "Content-Type" : "application/json"
         ]
         
-        self.httpClient.login(username: "johndoe", password: "secret")
+        try? self.httpClient.login(username: "johndoe", password: "secret")
     }
     override func tearDown() {
     }
