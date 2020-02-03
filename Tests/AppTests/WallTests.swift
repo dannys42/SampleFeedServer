@@ -22,11 +22,18 @@ class WallTests: XCTestCase {
         try? self.httpClient.login(username: "johndoe", password: "secret")
     }
     override func tearDown() {
+        try? self.httpClient.logout()
     }
     
-    func testThatUserCanPost() throws {
-        
-    }
+//    func testThatUserCanCreateWall() throws {
+//        let username = "test.create_wall"
+//        let password = "test_secret"
+//        let displayName = "testThatUserCanCreateWall()"
+//        try? httpClient.createUser(username: username, password: password, displayName: displayName)
+//        try httpClient.login(username: username, password: password)
+//        
+//    }
+//    
     func testThatMainPageDoesNotExist() throws {
         let expectedStatus = 404
         let (resp,_) = try self.httpClient.get("/")

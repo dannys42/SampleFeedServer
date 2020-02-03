@@ -12,20 +12,24 @@ import FluentSQLite
 /// Simple wall controller.
 final class WallController {
 
-    /// Returns a list of all walls for the auth'd user.
-    static func index(_ req: Request) throws -> Future<[Wall]> {
-        // wallId
+    /// Returns a specific wall for the auth'd user.
+    func getSingle(_ req: Request) throws -> Future<Wall> {
+        
+        // get the wallId
         let wallId = try req.parameters.next(Int.self)
         
         // fetch auth'd user
         let user = try req.requireAuthenticated(User.self)
-        
-        // query all wall's belonging to user
+
         return try Wall.query(on: req)
             .filter(\.userId == user.requireID())
             .filter(\.id == wallId)
             .all()
+            .map(to: Wall.self) { wallList in
+                return wallList[0]
+        }
     }
+    
     /// Returns a list of all walls for the auth'd user.
     func index(_ req: Request) throws -> Future<[Wall]> {
         // fetch auth'd user
@@ -43,6 +47,7 @@ final class WallController {
         
         // decode request content
         return try req.content.decode(CreateWallRequest.self).flatMap { wall in
+            print("Attempting to create wall with topic: \(wall.topic)")
             // save new wall
             return try Wall(topic: wall.topic, isPublic: wall.isPublic, userID: user.requireID())
                 .save(on: req)
@@ -71,7 +76,6 @@ final class WallController {
 
 /// Represents data required to create a new wall.
 struct CreateWallRequest: Content {
-    /// Wall topic.
     var topic: String
     var isPublic: Bool
 }

@@ -14,7 +14,7 @@ final class PostController {
     /// Returns a list of all posts on the given wall
     func index(_ req: Request) throws -> Future<[Post]> {
         // fetch auth'd user
-        let user = try req.requireAuthenticated(User.self)
+        let _ = try req.requireAuthenticated(User.self)
         
         // TODO: Ensure user is a meber of the wall
         

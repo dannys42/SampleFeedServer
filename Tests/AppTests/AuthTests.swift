@@ -34,20 +34,20 @@ class AuthTests: XCTestCase {
     }
     
     func testThatCreatingDuplicateUserReturnsConflict() throws {
-        let username = "John Doe"
-        let email = "john@somewhere.galaxy"
+        let username = "john@somewhere.galaxy"
+        let displayName = "John Doe"
         let password = "secret"
         
         // ignore first one as user may be created already from previous tests
         try? self.httpClient.createUser(username: username,
                                                    password: password,
-                                                   email: email)
+                                                   displayName: displayName)
         
         // second one should have conflict
         do {
             try self.httpClient.createUser(username: username,
                                                    password: password,
-                                                   email: email)
+                                                   displayName: displayName)
         } catch SampleHTTPClient.LoginFailures.userAlreadyExists {
             // good
             return
@@ -59,15 +59,17 @@ class AuthTests: XCTestCase {
     }
     
     func testThatCannotCreateUserTwice() throws {
-        let expectedStatus1 = 200
         let expectedStatus2 = 409
         let userInfo = [ "name" : "John Doe",
                          "email" : "john@somewhere.galaxy",
                          "password" : "secret"
         ]
-        let (resp1,_) = try self.httpClient.post("/users", userInfo)
+        let (_,_) = try self.httpClient.post("/users", userInfo)
 
-        XCTAssertTrue(resp1.statusCode == expectedStatus1, "Should return error due to invalid parameters  (status=\(resp1.statusCode)  expected=\(expectedStatus1))")
+        /* ignore first response:
+            - test case already covered by other test
+            - a user may be created by other tests.
+         */
 
         let (resp2,_) = try self.httpClient.post("/users", userInfo)
         print("status: \(resp2.statusCode)")

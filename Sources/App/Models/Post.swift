@@ -47,8 +47,8 @@ extension Post: Migration {
     }
 }
 
-/// Allows `Wall` to be encoded to and decoded from HTTP messages.
+/// Allows `Post` to be encoded to and decoded from HTTP messages.
 extension Post: Content { }
 
-/// Allows `Wall` to be used as a dynamic parameter in route definitions.
+/// Allows `Post` to be used as a dynamic parameter in route definitions.
 extension Post: Parameter { }
