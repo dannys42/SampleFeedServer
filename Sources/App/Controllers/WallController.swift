@@ -26,8 +26,11 @@ final class WallController {
             .filter(\.id == wallId)
             .all()
             .map(to: Wall.self) { wallList in
-                return wallList[0]
-        }
+                guard let wall = wallList.first else {
+                    throw Abort(.notFound)
+                }
+                return wall
+            }
     }
     
     /// Returns a list of all walls for the auth'd user.

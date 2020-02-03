@@ -21,17 +21,12 @@ public func routes(_ router: Router) throws {
     bearer.get("walls", Int.parameter, use: wallController.getSingle)
 
 //    wall.post("posts", use: PostController.create)
-    /*
-    wall.get("posts") { req in
-        let wallId = req.parameters.next(Int.self)
-        let postController = PostController(wallId: wallId)
-        
-//        postController.index(req)
-//        return req
-        return req.response()
+    bearer.group("walls", Int.parameter) { wallRoute in
+        let postController = PostController()
+        wallRoute.get("posts", use: postController.index)
+        wallRoute.post("posts", use: postController.create)
     }
- */
-    
+
 //    let wall = walls.group(":id") { wall in
 //        let wallId = wall.parameters.next(Int.self)
 //        let postController = PostController(wallId: wallId)

@@ -9,16 +9,16 @@ final class Post: SQLiteModel {
     /// Reference to the wall that this Post belongs to.
     var wallId: Wall.ID
 
-    /// A title describing what this `Post` entails.
-    var title: String
+    /// The text content of this `Post`.
+    var text: String
     
     /// Reference to user that created this POST.
     var userId: User.ID
     
     /// Creates a new `Post`.
-    init(id: Int? = nil, wallId: Wall.ID, title: String, userId: User.ID) {
+    init(id: Int? = nil, wallId: Wall.ID, text: String, userId: User.ID) {
         self.id = id
-        self.title = title
+        self.text = text
         self.userId = userId
         self.wallId = wallId
     }
@@ -40,9 +40,11 @@ extension Post: Migration {
     static func prepare(on conn: SQLiteConnection) -> Future<Void> {
         return SQLiteDatabase.create(Post.self, on: conn) { builder in
             builder.field(for: \.id, isIdentifier: true)
-            builder.field(for: \.title)
+            builder.field(for: \.text)
             builder.field(for: \.userId)
+            builder.field(for: \.wallId)
             builder.reference(from: \.userId, to: \User.id)
+            builder.reference(from: \.wallId, to: \Wall.id)
         }
     }
 }
