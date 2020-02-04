@@ -21,8 +21,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/console.git", from: "3.0.0"),
         
         // common utilities
-        .package(url: "https://github.com/dannys42/SampleFeedUtilities", .branch("master"))
-//        .package(path: "SampleFeedUtilities")
+//        .package(url: "https://github.com/dannys42/SampleFeedUtilities", .branch("master"))
+        .package(path: "SampleFeedUtilities")
     ],
     targets: [
         .target(name: "App", dependencies: ["Authentication", "FluentSQLite", "Vapor", "VaporExt", "Rainbow", "Logging" ]),
