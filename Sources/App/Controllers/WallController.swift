@@ -21,12 +21,9 @@ final class WallController {
         // fetch auth'd user
         let user = try req.requireAuthenticated(User.self)
         let userId = try user.requireID()
-        
+
         return Wall.query(on: req)
-            .group(.or) { $0
-                .filter(\.userId == userId)
-                .filter(\.isPublic == true)
-            }
+            .filter(\.userId == userId)
             .filter(\.id == wallId)
             .all()
             .map(to: Wall.self) { wallList in
@@ -41,10 +38,14 @@ final class WallController {
     func index(_ req: Request) throws -> Future<[Wall]> {
         // fetch auth'd user
         let user = try req.requireAuthenticated(User.self)
-        
+        let userId = try user.requireID()
+
         // query all wall's belonging to user
-        return try Wall.query(on: req)
-            .filter(\.userId == user.requireID()).all()
+        return Wall.query(on: req)
+            .group(.or) { $0
+                .filter(\.isPublic == true)
+                .filter(\.userId == userId)
+            }.all()
     }
 
     /// Creates a new Wall for the auth'd user.
