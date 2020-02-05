@@ -20,9 +20,13 @@ final class WallController {
         
         // fetch auth'd user
         let user = try req.requireAuthenticated(User.self)
-
-        return try Wall.query(on: req)
-            .filter(\.userId == user.requireID())
+        let userId = try user.requireID()
+        
+        return Wall.query(on: req)
+            .group(.or) { $0
+                .filter(\.userId == userId)
+                .filter(\.isPublic == true)
+            }
             .filter(\.id == wallId)
             .all()
             .map(to: Wall.self) { wallList in

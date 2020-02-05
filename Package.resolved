@@ -101,6 +101,15 @@
         }
       },
       {
+        "package": "SampleFeedUtilities",
+        "repositoryURL": "https://github.com/dannys42/SampleFeedUtilities",
+        "state": {
+          "branch": "master",
+          "revision": "ced70d4f0f7b82285a777896fed3eb749348e27a",
+          "version": null
+        }
+      },
+      {
         "package": "Service",
         "repositoryURL": "https://github.com/vapor/service.git",
         "state": {
